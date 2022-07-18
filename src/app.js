@@ -1,83 +1,70 @@
-const fs = require("fs").promises;
-const { getPlayerStats } = require("./getPlayerStats");
-const CREATURE_ADDITIVE_SCALING = 2;
-const CREATURE_MULTIPLICATIVE_SCALING = 1;
-const CREATURE_STAT_BASE = 1.04;
-const CREATURE_BASE_SCALING = 0.0002;
+const chalk = require("chalk");
+const clear = require("clear");
+const figlet = require("figlet");
 
-// generic funtion to read and return an object from a json file
-const read = async (location) => {
-	const data = await fs.readFile(location, (err, data) => {
-		if (err) throw err;
-	});
-	return JSON.parse(data.toString());
-};
+const inquirer = require("./helpers/inquirer");
+const { getHeroes } = require("./playerStats/getHeroes");
+const { deleteFile } = require("./helpers/deleteFile");
+const { read } = require("./helpers/readFile");
 
-// actual game calculation
-const creaturePower = (level, baseAttack) => {
-	return Math.floor(
-		(CREATURE_ADDITIVE_SCALING * level +
-			(CREATURE_MULTIPLICATIVE_SCALING *
-				level *
-				(CREATURE_STAT_BASE + level * CREATURE_BASE_SCALING) **
-					(level - 1)) /
-				2) *
-			baseAttack
-	);
-};
+const creatureStats = require("./creatureStats/index");
+const playerStats = require("./playerStats/index");
+const deadlyRings = require("./creatureStats/calculate");
 
-// get player stats
-const playerStats = getPlayerStats();
+clear();
 
-let oneShotCreatures = [];
+console.log(
+	chalk.yellow(figlet.textSync("World Seed", { horizontalLayout: "full" }))
+);
+console.log(
+	"\nWelcome to the World Seed Calculator!\nPress Ctrl+C to quit the application or cancel an operation.\n"
+);
 
-// read the  creatureStats.json and save here
-const creatureStats = read("./src/json/creatureStats.json");
-creatureStats.then((data) => {
-	for (creature in data) {
-		let flag = true;
-		let ring = 1;
-		let creatureName = creature;
-		console.log(creature);
-		while (flag) {
-			if (ring >= 250) {
-				flag = false;
+const run = async () => {
+	let runFlag = true;
+	while (runFlag) {
+		const statsExist = await creatureStats.writeCreatureStats();
+		const selection = await inquirer.getFirstSelection();
+		let arrayOfHeroes = await getHeroes();
+
+		switch (selection.firstSelection) {
+			case "Calculate deadly rings":
+				heroToCalculate = await inquirer.heroToCalculateFor(
+					arrayOfHeroes
+				);
+				hero = await read(
+					`./src/playerStats/heroes/${heroToCalculate.heroToCalculate}`
+				);
+				creatures = await read(
+					"./src/creatureStats/creatureStats.json"
+				);
+				let oneShotCreatures = await deadlyRings.calculateDeadlyRings(
+					creatures,
+					hero
+				);
+				console.log(oneShotCreatures);
 				break;
-			}
-			const element = data[creature]["Element"];
 
-			const playerArmor = playerStats.Armor;
-			const playerDeathLimit = playerStats["Death Limit"];
-			const playerElementalResistance = playerStats[element];
-
-			const creatureAttack = creaturePower(
-				ring,
-				data[creature]["Base Attack"]
-			);
-			const criticalDamage =
-				creatureAttack * (1 + data[creature]["Critical Damage"]);
-
-			const armorPenetration = data[creature]["Armor Penetration"];
-			const physicalDamage = criticalDamage * 0.75;
-			const elementalDamage = criticalDamage * 0.25;
-			const physicalDamageReduced =
-				physicalDamage -
-				physicalDamage * playerArmor +
-				physicalDamage * armorPenetration;
-
-			const elementalDamageReduced =
-				elementalDamage - elementalDamage * playerElementalResistance;
-
-			const totalDamage = physicalDamageReduced + elementalDamageReduced;
-
-			if (totalDamage >= playerDeathLimit) {
-				oneShotCreatures.push([creatureName, ring]);
-				flag = false;
+			case "Enter a hero":
+				const getPlayerStats = await inquirer.getPlayerStats();
+				playerStats.writePlayerStats(getPlayerStats);
 				break;
-			} else {
-				ring++;
-			}
+
+			case "Delete a hero":
+				// let arrayOfHeroes = await getHeroes();
+				const heroToDelete = await inquirer.whichHeroToDelete(
+					arrayOfHeroes
+				);
+				console.log(heroToDelete);
+				deleteFile(
+					`./src/playerStats/heroes/${heroToDelete.heroToDelete}`
+				);
+				break;
+			case "Quit application":
+				runFlag = false;
+				break;
 		}
 	}
-	console.log(oneShotCreatures);
-});
+};
+
+run();
