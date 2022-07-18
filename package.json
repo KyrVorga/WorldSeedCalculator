@@ -1,23 +1,27 @@
 {
-  "name": "worldseedcalculator",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/KyrVorga/WorldSeedCalculator.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/KyrVorga/WorldSeedCalculator/issues"
-  },
-  "homepage": "https://github.com/KyrVorga/WorldSeedCalculator#readme",
-  "dependencies": {
-    "prompt-sync": "^4.2.0"
-  }
+	"name": "worldseedcalculator",
+	"version": "1.0.0",
+	"description": "A tool for World Seed to calculate at what ring creatures will kill you.",
+	"main": "app.js",
+	"scripts": {
+		"start": "node src/app.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/KyrVorga/WorldSeedCalculator.git"
+	},
+	"keywords": [],
+	"author": "Rhylei Tremlett",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/KyrVorga/WorldSeedCalculator/issues"
+	},
+	"homepage": "https://github.com/KyrVorga/WorldSeedCalculator#readme",
+	"dependencies": {
+		"chalk": "^4.1.2",
+		"clear": "^0.1.0",
+		"dotenv": "^16.0.1",
+		"figlet": "^1.5.2",
+		"inquirer": "^8.2.4"
+	}
 }

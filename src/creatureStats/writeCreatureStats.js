@@ -1,4 +1,4 @@
-const writeFile = require("fs").writeFile;
+const fs = require("fs").promises;
 
 const creatureStats = {
 	Alora: {
@@ -515,11 +515,17 @@ const creatureStats = {
 
 const data = JSON.stringify(creatureStats, null, 4);
 
-writeFile("./src/json/creatureStats.json", data, (err) => {
-	if (err) {
-		throw err;
-	}
-	console.log("JSON data is saved.");
-});
+const writeCreatureStats = () => {
+	fs.writeFile("./src/creatureStats/creatureStats.json", data, (err) => {
+		if (err) {
+			throw err;
+		}
+		console.log("JSON data is saved.");
+	});
+};
 
 // for adding in new entries -->   '': {'Element': '', 'Armor Penetration': 0, 'Critical Damage': 0, 'Base Attack': },
+
+module.exports = {
+	writeCreatureStats,
+};

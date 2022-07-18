@@ -32,8 +32,13 @@ function getPlayerStats() {
 	return playerStats;
 }
 
-const ask = (question) => {
-	const answer = prompt(question);
-	return answer;
-};
+const data = JSON.stringify(creatureStats, null, 4);
+
+writeFile("./src/creatureStats/creatureStats.json", data, (err) => {
+	if (err) {
+		throw err;
+	}
+	console.log("JSON data is saved.");
+});
+
 module.exports = { getPlayerStats };
