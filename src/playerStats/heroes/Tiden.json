@@ -1,12 +1,12 @@
 {
     "Name": "Tiden",
-    "Health": 0,
+    "Health": 15000,
     "Armor": 0,
-    "Void Resistance": 0,
-    "Water Resistance": 0,
-    "Fire Resistance": 0,
-    "Nature Resistance": 0,
-    "Earth Resistance": 0,
-    "Frost Resistance": 0,
-    "Lightning Resistance": 0
+    "Void": 0,
+    "Water": 0,
+    "Fire": 0,
+    "Nature": 0,
+    "Earth": 0,
+    "Frost": 0,
+    "Lightning": 0
 }
