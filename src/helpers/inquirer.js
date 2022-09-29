@@ -1,16 +1,21 @@
 const inquirer = require("inquirer");
+const hero = require("../models/hero");
 
 module.exports = {
-	getFirstSelection: () => {
+	mainMenu: () => {
 		const questions = [
 			{
 				type: "rawlist",
-				name: "firstSelection",
+				name: "mainMenu",
 				message: "What would you like to do? ",
 				choices: [
 					"Calculate deadly rings",
-					"Enter a hero",
-					"Delete a hero",
+					// "Find weakest creature",
+					"View all heroes",
+					"Add a hero",
+					"Update a hero",
+					"Remove a hero",
+					"Logout",
 					"Quit application",
 				],
 				default: 0,
@@ -19,90 +24,121 @@ module.exports = {
 
 		return inquirer.prompt(questions);
 	},
-	getPlayerStats: () => {
+	getHeroStats: (
+		hero = {
+			name: "Hero",
+			health: 0,
+			armor: 0,
+			void: 0,
+			lightning: 0,
+			fire: 0,
+			nature: 0,
+			earth: 0,
+			frost: 0,
+			water: 0,
+		}
+	) => {
 		const questions = [
 			{
 				type: "input",
-				name: "Name",
+				name: "name",
 				message: "Hero Name: ",
-				default: "Hero",
+				default: hero.name || "Hero",
 			},
 			{
 				type: "number",
-				name: "Health",
+				name: "health",
 				message: "Health: ",
-				default: 0,
+				default: hero.health || 0,
 			},
 			{
 				type: "number",
-				name: "Armor",
+				name: "armor",
 				message: "Armor: ",
-				default: 0,
+				default: hero.armor || 0,
 			},
 			{
 				type: "number",
-				name: "Void",
+				name: "void",
 				message: "Void Resistance: ",
-				default: 0,
+				default: hero.void || 0,
 			},
 			{
 				type: "number",
-				name: "Water",
-				message: "Water Resistance: ",
-				default: 0,
-			},
-			{
-				type: "number",
-				name: "Fire",
-				message: "Fire Resistance: ",
-				default: 0,
-			},
-			{
-				type: "number",
-				name: "Nature",
-				message: "Nature Resistance: ",
-				default: 0,
-			},
-			{
-				type: "number",
-				name: "Earth",
-				message: "Earth Resistance: ",
-				default: 0,
-			},
-			{
-				type: "number",
-				name: "Frost",
-				message: "Frost Resistance: ",
-				default: 0,
-			},
-			{
-				type: "number",
-				name: "Lightning",
+				name: "lightning",
 				message: "Lightning Resistance: ",
-				default: 0,
+				default: hero.lightning || 0,
+			},
+			{
+				type: "number",
+				name: "fire",
+				message: "Fire Resistance: ",
+				default: hero.fire || 0,
+			},
+			{
+				type: "number",
+				name: "nature",
+				message: "Nature Resistance: ",
+				default: hero.nature || 0,
+			},
+			{
+				type: "number",
+				name: "earth",
+				message: "Earth Resistance: ",
+				default: hero.earth || 0,
+			},
+			{
+				type: "number",
+				name: "frost",
+				message: "Frost Resistance: ",
+				default: hero.frost || 0,
+			},
+			{
+				type: "number",
+				name: "water",
+				message: "Water Resistance: ",
+				default: hero.water || 0,
 			},
 		];
 
 		return inquirer.prompt(questions);
 	},
-	whichHeroToDelete: (arrayOfHeroes) => {
+	getHeroSelection: (arrayOfHeroes) => {
 		const questions = [
 			{
 				type: "rawlist",
-				name: "heroToDelete",
-				message: "Who would you like to delete? ",
+				name: "heroSelection",
+				message: "Select a hero: ",
 				choices: arrayOfHeroes,
 			},
 		];
 		return inquirer.prompt(questions);
 	},
-	heroToCalculateFor: (arrayOfHeroes) => {
+	getUserDetails: () => {
+		const questions = [
+			{
+				type: "input",
+				name: "username",
+				message: "Username: ",
+				default: "username",
+			},
+			{
+				type: "input",
+				name: "password",
+				message: "Password: ",
+				default: "password",
+			},
+		];
+		return inquirer.prompt(questions);
+	},
+	loginOrRegister: () => {
 		const questions = [
 			{
 				type: "rawlist",
-				name: "heroToCalculate",
-				message: "Choose a hero: ",
-				choices: arrayOfHeroes,
+				name: "loginOrRegister",
+				message: "Login or Register: ",
+				choices: ["Login", "Register", "Quit"],
+				default: 0,
 			},
 		];
 		return inquirer.prompt(questions);
