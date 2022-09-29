@@ -64,6 +64,9 @@ const run = async () => {
 					}
 				).clone();
 
+				loggedInUser = await read("./user.json").catch((err) => {
+					console.log("No user logged in");
+				});
 				break;
 			case "Register":
 				userDetails = await getUserDetails();
@@ -93,7 +96,6 @@ const run = async () => {
 	while (runFlag) {
 		let heroStats;
 		let allHeroes;
-
 		// ANCHOR Main Menu
 		const selection = await mainMenu();
 		switch (selection.mainMenu) {

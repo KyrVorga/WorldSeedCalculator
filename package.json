@@ -4,7 +4,8 @@
 	"description": "A tool for World Seed to calculate at what ring creatures will kill you.",
 	"main": "app.js",
 	"scripts": {
-		"start": "node src/app.js"
+		"start": "node src/app.js",
+		"build": "nexe --build -i src/app.js"
 	},
 	"repository": {
 		"type": "git",
