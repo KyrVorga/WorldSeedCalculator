@@ -2,31 +2,26 @@ const { creaturePower } = require("./calculateCreaturePower");
 
 const calculateDeadlyRings = (creatureStats, playerStats) => {
 	let oneShotCreatures = [];
-	for (creature in creatureStats) {
+	// for (creature in creatureStats) {
+	creatureStats.forEach((creature) => {
 		let flag = true;
 		let ring = 1;
-		let creatureName = creature;
 		while (flag) {
 			if (ring >= 250) {
 				flag = false;
 				break;
 			}
-			const element = creatureStats[creature]["Element"];
+			const element = creature["element"];
 
-			const playerArmor = playerStats.Armor;
-			const playerDeathLimit = playerStats["Health"] * 1.25;
+			const playerArmor = playerStats.armor;
+			const playerDeathLimit = playerStats["health"] * 1.25;
 			const playerElementalResistance = playerStats[element];
 
-			const creatureAttack = creaturePower(
-				ring,
-				creatureStats[creature]["Base Attack"]
-			);
+			const creatureAttack = creaturePower(ring, creature["base attack"]);
 			const criticalDamage =
-				creatureAttack *
-				(1 + creatureStats[creature]["Critical Damage"]);
+				creatureAttack * (1 + creature["critical damage"]);
 
-			const armorPenetration =
-				creatureStats[creature]["Armor Penetration"];
+			const armorPenetration = creature["armor penetration"];
 			const physicalDamage = criticalDamage * 0.75;
 			const elementalDamage = criticalDamage * 0.25;
 			const physicalDamageReduced =
@@ -38,14 +33,14 @@ const calculateDeadlyRings = (creatureStats, playerStats) => {
 				elementalDamage - elementalDamage * playerElementalResistance;
 			const totalDamage = physicalDamageReduced + elementalDamageReduced;
 			if (totalDamage >= playerDeathLimit) {
-				oneShotCreatures.push([creatureName, ring]);
+				oneShotCreatures.push([creature.name, ring]);
 				flag = false;
 				break;
 			} else {
 				ring++;
 			}
 		}
-	}
+	});
 	return oneShotCreatures;
 };
 
